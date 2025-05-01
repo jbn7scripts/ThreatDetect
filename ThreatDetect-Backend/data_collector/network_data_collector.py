@@ -1,3 +1,8 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║  Jaber Ali Farooqi · W1926781 · University of Westminster                ║
+# ║  Final-Year Project – ThreatDetect (Real-Time Network Threat Detection)  ║
+# ║  © 2025                                                                  ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
 import time
 import csv
 import threading
