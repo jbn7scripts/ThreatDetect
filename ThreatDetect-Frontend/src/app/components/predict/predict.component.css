@@ -1,0 +1,15 @@
+/* Example usage of your existing .auth-container, .btn-cyber, etc. */
+.auth-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Possibly you want a background from an image: */
+body {
+  background: url('../../../assets/images/predictbg.jpg') no-repeat center center;
+  background-size: cover;
+}

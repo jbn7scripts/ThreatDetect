@@ -1,0 +1,33 @@
+<div class="container my-5 py-5">
+  <div class="card p-4 bg-dark text-light">
+    <h2 class="text-center mb-4">Switch Machine Learning Model</h2>
+    <p class="text-center text-muted mb-3">
+      Current Model: <span class="text-info fw-bold">{{ currentModel }}</span>
+    </p>
+
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="modelSelect" class="form-label"
+          ><strong>Select a Model</strong>:</label
+          >
+          <select
+            id="modelSelect"
+            [(ngModel)]="selectedModel"
+            class="form-select"
+            name="modelSelect"
+          >
+            <option [value]="''" disabled>Select model...</option>
+            <option *ngFor="let m of availableModels" [value]="m">
+              {{ m }}
+            </option>
+          </select>
+        </div>
+
+        <button class="btn btn-cyber w-100" (click)="onChangeModel()">
+          Change Model
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

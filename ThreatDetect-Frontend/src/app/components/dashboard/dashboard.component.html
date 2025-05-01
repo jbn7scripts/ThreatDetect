@@ -1,0 +1,99 @@
+<div class="container my-5 py-5">
+  <h2 class="text-center mb-4">Dashboard Overview</h2>
+  <!-- Card 1: Records Table -->
+  <div class="card cardWithShadow mb-4 bg-dark text-light">
+    <div class="card-body p-4">
+      <h5 class="card-title mb-3">Records (Anomalies, Malware, Intrusions)</h5>
+      <div style="max-height: 50vh; overflow-y: auto;">
+        <table class="table table-dark table-hover align-middle m-0">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Flow Key</th>
+            <th>Prediction Label</th>
+            <th>Timestamp</th>
+            <th>Features</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let rec of records">
+            <td>{{ rec.id }}</td>
+            <td>{{ rec.flow_key }}</td>
+            <td>{{ rec.prediction_label }}</td>
+            <td>{{ formatTimestamp(rec.timestamp) }}</td>
+            <!-- Instead of dumping the JSON, show a button -->
+            <td>
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="showFeatures(rec.features_json)"
+              >
+                View Features
+              </button>
+            </td>
+            <td>
+              <ng-container *ngIf="rec.prediction_label === 'BENIGN'">
+                Safe
+              </ng-container>
+              <ng-container *ngIf="rec.prediction_label !== 'BENIGN'">
+                Malicious
+              </ng-container>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="empty-statee" *ngIf="records.length === 0">
+          <p>No records found.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row: Donut Chart + Line Chart -->
+  <div class="row">
+    <!-- Donut Chart -->
+    <div class="col-lg-4 mb-4">
+      <div class="card cardWithShadow bg-dark text-light">
+        <div class="card-body p-4">
+          <h5 class="card-title">Records Overview</h5>
+          <!-- Donut chart if donutChartOptions is set -->
+          <apx-chart
+            #donutChart
+            *ngIf="donutChartOptions"
+            [series]="donutChartOptions.series"
+            [chart]="donutChartOptions.chart"
+            [labels]="donutChartOptions.labels"
+            [colors]="donutChartOptions.colors"
+            [plotOptions]="donutChartOptions.plotOptions"
+            [dataLabels]="donutChartOptions.dataLabels"
+            [legend]="donutChartOptions.legend"
+            [tooltip]="donutChartOptions.tooltip"
+          >
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line Chart -->
+    <div class="col-lg-8 mb-4">
+      <div class="card cardWithShadow bg-dark text-light">
+        <div class="card-body p-4">
+          <h5 class="card-title">Records Monitoring</h5>
+          <!-- Line chart if lineChartOptions is set -->
+          <apx-chart
+            #lineChart
+            *ngIf="lineChartOptions"
+            [series]="lineChartOptions.series"
+            [chart]="lineChartOptions.chart"
+            [xaxis]="lineChartOptions.xaxis"
+            [stroke]="lineChartOptions.stroke"
+            [legend]="lineChartOptions.legend"
+            [grid]="lineChartOptions.grid"
+            [colors]="lineChartOptions.colors"
+          >
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

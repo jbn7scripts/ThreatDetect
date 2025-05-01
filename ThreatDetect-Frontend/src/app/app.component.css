@@ -1,0 +1,38 @@
+/* src/app/app.component.css */
+
+/* Example: make the navbar scrolled effect */
+.navbar.scrolled {
+  background-color: #000000cc !important;
+  transition: background-color 300ms linear;
+}
+
+/* Our custom button style (btn-cyber), replicate from old code */
+.btn-cyber {
+  background-color: #3b5998;
+  border: none;
+  color: white;
+}
+
+/* Footer styling */
+.footer {
+  background-color: #212529;
+  color: #fff;
+  padding: 40px 0;
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* If you want a simple script for scrolled effect, add to app.component.ts or do: */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* ... Additional styling as needed ... */

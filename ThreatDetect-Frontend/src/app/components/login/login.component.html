@@ -1,0 +1,51 @@
+<!-- src/app/pages/login/login.component.html -->
+<div class="container login-container">
+  <div class="auth-container">
+    <div class="text-center mb-4">
+      <h2 class="h3">Secure Access Portal</h2>
+      <p>Two-factor authentication enabled</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="mb-4">
+        <label class="form-label">Email Address</label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <input type="email" [(ngModel)]="email" name="email" class="form-control" required />
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Password</label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-lock"></i>
+          </span>
+          <input
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            class="form-control"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-cyber">
+          <i class="fas fa-sign-in-alt me-2"></i>Authenticate
+        </button>
+      </div>
+
+      <div class="text-center">
+        <p>
+          New to Threat Detect?
+          <a routerLink="/register" class="text-primary">Create Account</a>
+        </p>
+        <a href="#" class="text-primary">Forgot Password?</a>
+      </div>
+    </form>
+  </div>
+</div>

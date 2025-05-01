@@ -1,0 +1,9 @@
+.card.bg-dark {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem;
+}
+
+.text-info.fw-bold {
+  font-size: 1.1rem;
+}

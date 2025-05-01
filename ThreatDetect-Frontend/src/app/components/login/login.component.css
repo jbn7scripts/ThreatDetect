@@ -1,0 +1,8 @@
+/* src/app/pages/login/login.component.css */
+.login-container {
+  margin-top: 80px;
+  background: url('../../../assets/images/background.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 50px 0;
+  min-height: 80vh;
+}

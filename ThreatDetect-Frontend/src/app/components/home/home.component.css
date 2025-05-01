@@ -1,0 +1,17 @@
+/* src/app/pages/home/home.component.css */
+.hero-section {
+  background: url('../../../assets/images/background.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 100px 0;
+  color: #fff;
+}
+
+.feature-card {
+  background-color: #2c2f33;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+.feature-icon i {
+  color: #9c27b0;
+}
