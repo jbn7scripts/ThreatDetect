@@ -1,6 +1,6 @@
 /* src/app/pages/home/home.component.css */
 .hero-section {
-  background: url('../../../assets/images/background.jpg') no-repeat center center;
+
   background-size: cover;
   padding: 100px 0;
   color: #fff;
@@ -11,6 +11,7 @@
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+  border-color: #464cee;
 }
 .feature-icon i {
   color: #9c27b0;

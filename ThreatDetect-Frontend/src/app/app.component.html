@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand" routerLink="/">
-      <i class="fas fa-shield-alt me-2"></i> Threat Detect
+      <img src="assets/images/logo.svg"> Threat Detect
     </a>
     <button
       class="navbar-toggler"
@@ -43,7 +43,7 @@
         </li>
 
         <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="btn btn-cyber ms-2" routerLink="/register">Get Started</a>
+          <a class="btn btn-cyber ms-2" routerLink="/register">Register</a>
         </li>
 
         <!--        style="background-color: #9b5b5b; border-radius: 5px; padding: 8px 10px"-->
@@ -69,18 +69,22 @@
       <div class="col-md-2">
         <!-- Possibly solutions links -->
       </div>
-      <div class="col-md-2">
-        <h6>Company</h6>
-        <ul class="list-unstyled">
-          <li><a routerLink="/about" class="text-light">About</a></li>
-        </ul>
+      <div class="jerry">
+        <div class="col-md-2-">
+          <h6>Company</h6>
+          <ul class="list-unstyled">
+            <li><a routerLink="/about" class="text-light">About</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="col-md-4">
-        <h6>Contact</h6>
-        <ul class="list-unstyled">
-          <li>supportthreatdetect.com</li>
-          <li>+44 7745690988</li>
-        </ul>
+      <div class="spike">
+        <div class="col-md-4-">
+          <h6>Contact</h6>
+          <ul class="list-unstyled">
+            <li>supportthreatdetect.com</li>
+            <li>+44 7745690988</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="text-center mt-4">

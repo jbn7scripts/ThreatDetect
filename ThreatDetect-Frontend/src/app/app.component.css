@@ -9,7 +9,8 @@
 /* Our custom button style (btn-cyber), replicate from old code */
 .btn-cyber {
   background-color: #3b5998;
-  border: none;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
   color: white;
 }
 
@@ -18,6 +19,18 @@
   background-color: #212529;
   color: #fff;
   padding: 40px 0;
+}
+
+.jerry {
+  align-content: center;
+  margin-left: 950px;
+  margin-top: -70px;
+}
+
+.spike {
+  align-content: center;
+  margin-left: 1100px;
+  margin-top: -70px;
 }
 
 .footer a {
@@ -36,3 +49,7 @@ body, html {
 }
 
 /* ... Additional styling as needed ... */
+
+img {
+  height: 60px;
+}
