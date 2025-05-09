@@ -28,7 +28,8 @@ export class DataService {
   }
 
   getOverviewRecords() {
-    // You might have your Flask endpoint at /api/overview_records
-    return this.http.get<any>(`${environment.apiUrl}/overview_records`);
+    const token = localStorage.getItem('token');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.get<any>(`${environment.apiUrl}/overview_records`, { headers });
   }
 }

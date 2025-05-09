@@ -1,24 +1,25 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from "@angular/forms";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { NgChartsModule } from "ng2-charts";
+import { NgApexchartsModule } from "ng-apexcharts";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import {FormsModule} from "@angular/forms";
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ModelSwitchComponent } from './components/model-switch/model-switch.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-
-
-
-import { AuthInterceptor} from "./interceptors/auth.interceptor";
-import {NgChartsModule} from "ng2-charts";
 import { PredictComponent } from './components/predict/predict.component';
 import { UploadComponent } from './components/upload/upload.component';
-import {ChartComponent, NgApexchartsModule} from "ng-apexcharts";
+import { AuthInterceptor } from "./interceptors/auth.interceptor";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,16 +32,17 @@ import {ChartComponent, NgApexchartsModule} from "ng-apexcharts";
     PredictComponent,
     UploadComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        NgChartsModule,
-        HttpClientModule,
-        ChartComponent,
-        NgApexchartsModule
-
-    ],
+  imports: [
+    BrowserModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule,
+    AppRoutingModule,
+    NgChartsModule,
+    NgApexchartsModule,
+    MatIconModule
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -48,6 +50,7 @@ import {ChartComponent, NgApexchartsModule} from "ng-apexcharts";
       multi: true,
     }
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

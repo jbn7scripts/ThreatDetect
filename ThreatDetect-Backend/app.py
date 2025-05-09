@@ -6,7 +6,6 @@ import jwt
 import bcrypt
 import numpy as np
 import pandas as pd
-
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
@@ -17,7 +16,8 @@ from Database import (
     read_cred,
     get_sniffed_data,
     get_label_counts,
-    insert_sniffed_flow
+    insert_sniffed_flow,
+    fetch_dashboard_overview
 )
 from sniffer import Sniffer
 from flow_manager import FlowManager
@@ -503,10 +503,10 @@ def api_root():
     return jsonify({"message": "ThreatDetect REST API is running"}), 200
 
 @app.route("/api/overview_records", methods=["GET"])
-@jwt_required  # if you want to protect it
+@jwt_required
 def api_overview_records():
     try:
-        data = fetch_sniffed_data_overview()
+        data = fetch_dashboard_overview()
         return jsonify(data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

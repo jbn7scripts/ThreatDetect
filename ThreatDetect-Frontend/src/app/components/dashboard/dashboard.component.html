@@ -1,99 +1,157 @@
-<div class="container my-5 py-5">
-  <h2 class="text-center mb-4">Dashboard Overview</h2>
-  <!-- Card 1: Records Table -->
-  <div class="card cardWithShadow mb-4 bg-dark text-light">
-    <div class="card-body p-4">
-      <h5 class="card-title mb-3">Records (Anomalies, Malware, Intrusions)</h5>
-      <div style="max-height: 50vh; overflow-y: auto;">
-        <table class="table table-dark table-hover align-middle m-0">
+<div class="dashboard-container">
+  <h2 class="dashboard-title">Dashboard Overview</h2>
+
+  <!-- Records Table Card -->
+  <div class="dashboard-card">
+    <div class="dashboard-card-header">
+      <h5>Network Flow Records</h5>
+    </div>
+    <div class="dashboard-card-body">
+      <div class="dashboard-table-wrapper">
+        <table class="dashboard-table">
           <thead>
-          <tr>
-            <th>ID</th>
-            <th>Flow Key</th>
-            <th>Prediction Label</th>
-            <th>Timestamp</th>
-            <th>Features</th>
-            <th>Status</th>
-          </tr>
+            <tr>
+              <th>ID</th>
+              <th>Flow Key</th>
+              <th>Prediction Label</th>
+              <th>Timestamp</th>
+              <th>Features</th>
+              <th>Status</th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let rec of records">
-            <td>{{ rec.id }}</td>
-            <td>{{ rec.flow_key }}</td>
-            <td>{{ rec.prediction_label }}</td>
-            <td>{{ formatTimestamp(rec.timestamp) }}</td>
-            <!-- Instead of dumping the JSON, show a button -->
-            <td>
-              <button
-                class="btn btn-sm btn-secondary"
-                (click)="showFeatures(rec.features_json)"
-              >
-                View Features
-              </button>
-            </td>
-            <td>
-              <ng-container *ngIf="rec.prediction_label === 'BENIGN'">
-                Safe
-              </ng-container>
-              <ng-container *ngIf="rec.prediction_label !== 'BENIGN'">
-                Malicious
-              </ng-container>
-            </td>
-          </tr>
+            <tr *ngFor="let rec of records">
+              <td>{{ rec.id }}</td>
+              <td>{{ rec.flow_key }}</td>
+              <td>
+                <span [ngClass]="{
+                  'label-benign': rec.prediction_label === 'BENIGN',
+                  'label-malicious': rec.prediction_label !== 'BENIGN'
+                }">
+                  {{ rec.prediction_label }}
+                </span>
+              </td>
+              <td>{{ formatTimestamp(rec.timestamp) }}</td>
+              <td>
+                <button class="btn-features" (click)="showFeatures(rec.features_json)">
+                  View Features
+                </button>
+              </td>
+              <td>
+                <span [ngClass]="{
+                  'status-safe': rec.prediction_label === 'BENIGN',
+                  'status-malicious': rec.prediction_label !== 'BENIGN'
+                }">
+                  {{ rec.prediction_label === 'BENIGN' ? 'Safe' : 'Malicious' }}
+                </span>
+              </td>
+            </tr>
           </tbody>
         </table>
-        <div class="empty-statee" *ngIf="records.length === 0">
+        <div class="empty-state" *ngIf="records.length === 0">
           <p>No records found.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Row: Donut Chart + Line Chart -->
-  <div class="row">
+<!-- Charts Row -->
+<div class="dashboard-row dashboard-main-row">
+  <!-- Donut + KPI Card (single card) -->
+  <div class="dashboard-card dashboard-flex-row">
     <!-- Donut Chart -->
-    <div class="col-lg-4 mb-4">
-      <div class="card cardWithShadow bg-dark text-light">
-        <div class="card-body p-4">
-          <h5 class="card-title">Records Overview</h5>
-          <!-- Donut chart if donutChartOptions is set -->
-          <apx-chart
-            #donutChart
-            *ngIf="donutChartOptions"
-            [series]="donutChartOptions.series"
-            [chart]="donutChartOptions.chart"
-            [labels]="donutChartOptions.labels"
-            [colors]="donutChartOptions.colors"
-            [plotOptions]="donutChartOptions.plotOptions"
-            [dataLabels]="donutChartOptions.dataLabels"
-            [legend]="donutChartOptions.legend"
-            [tooltip]="donutChartOptions.tooltip"
-          >
-          </apx-chart>
+    <div class="dashboard-overview-col">
+      <div class="dashboard-card-header">
+        <h5>Records Overview</h5>
+      </div>
+      <div class="dashboard-card-body">
+        <apx-chart
+          *ngIf="donutChartOptions && donutChartOptions.series && donutChartOptions.series.length"
+          [series]="donutChartOptions.series"
+          [chart]="donutChartOptions.chart"
+          [labels]="donutChartOptions.labels"
+          [plotOptions]="donutChartOptions.plotOptions"
+          [dataLabels]="donutChartOptions.dataLabels"
+          [legend]="donutChartOptions.legend"
+          [colors]="donutChartOptions.colors"
+          [tooltip]="donutChartOptions.tooltip">
+        </apx-chart>
+      </div>
+    </div>
+    <!-- KPI Grid -->
+    <div class="dashboard-kpi-col">
+      <div class="kpi-grid">
+        <div class="dashboard-kpi-card kpi-total">
+          <div class="kpi-title">Total Records</div>
+          <div class="kpi-value">{{ totalRecords }}</div>
+        </div>
+        <div class="dashboard-kpi-card kpi-malicious">
+          <div class="kpi-title">Malicious Events</div>
+          <div class="kpi-value">{{ maliciousCount }}</div>
+        </div>
+        <div class="dashboard-kpi-card kpi-safe">
+          <div class="kpi-title">Safe Events</div>
+          <div class="kpi-value">{{ safeCount }}</div>
+        </div>
+        <div class="dashboard-kpi-card kpi-accuracy">
+          <div class="kpi-title">Benign Flow</div>
+          <div class="kpi-value">{{ detectionAccuracy }}%</div>
         </div>
       </div>
     </div>
+    <!-- Vertical Model Status Bar -->
+    <div class="dashboard-model-status-bar">
+      <div class="model-status-dot" [ngClass]="{'online': modelStatus === 'Online', 'offline': modelStatus !== 'Online'}"></div>
+      <div class="model-status-label">Model</div>
+      <div class="model-status-name">{{ modelVersion }}</div>
+      <div class="model-status-state">{{ modelStatus }}</div>
+    </div>
+  </div>
+</div>
 
-    <!-- Line Chart -->
-    <div class="col-lg-8 mb-4">
-      <div class="card cardWithShadow bg-dark text-light">
-        <div class="card-body p-4">
-          <h5 class="card-title">Records Monitoring</h5>
-          <!-- Line chart if lineChartOptions is set -->
-          <apx-chart
-            #lineChart
-            *ngIf="lineChartOptions"
-            [series]="lineChartOptions.series"
-            [chart]="lineChartOptions.chart"
-            [xaxis]="lineChartOptions.xaxis"
-            [stroke]="lineChartOptions.stroke"
-            [legend]="lineChartOptions.legend"
-            [grid]="lineChartOptions.grid"
-            [colors]="lineChartOptions.colors"
-          >
-          </apx-chart>
-        </div>
-      </div>
-    </div>
+<!-- Recent Alerts Table -->
+<div class="dashboard-card recent-alerts">
+  <div class="dashboard-card-header">
+    <h5>Recent Alerts</h5>
+  </div>
+  <div class="dashboard-card-body">
+    <table class="dashboard-table" style="margin: 0 auto; width: 100%; text-align: center;">
+      <thead>
+        <tr>
+          <th style="width: 13%; white-space: nowrap;">Time</th>
+          <th style="width: 13%">Type</th>
+          <th style="width: 13%">Source</th>
+          <th style="width: 13%">Destination</th>
+          <th style="width: 10%">Severity</th>
+          <th style="width: 10%">Protocol</th>
+          <th style="width: 14%">Country</th>
+          <th style="width: 14%">Info</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let alert of recentAlerts">
+          <td style="white-space: nowrap;">{{ alert.time * 1000 | date:'MM/dd, HH:mm' }}</td>
+          <td>{{ alert.type }}</td>
+          <td>{{ alert.source }}</td>
+          <td>{{ alert.destination }}</td>
+          <td>
+            <span [ngClass]="{
+              'severity-high': alert.severity === 'High',
+              'severity-medium': alert.severity === 'Medium',
+              'severity-low': alert.severity === 'Low'
+            }">{{ alert.severity }}</span>
+          </td>
+          <td>TCP</td>
+          <td>🇬🇧</td>
+          <td>
+            <div>No additional info</div>
+            <div style="color: #4ADE80; font-size: 0.98em; display: flex; align-items: center; justify-content: center; gap: 0.3em;">
+              <span>Email alert sent</span>
+              <span style="font-size: 1.1em;">✔️</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

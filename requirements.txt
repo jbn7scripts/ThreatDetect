@@ -17,7 +17,7 @@ PyJWT==2.10.1
 python-dateutil==2.9.0.post0
 pytz==2025.1
 scapy==2.6.1
-scikit-learn==1.2.2
+scikit-learn==1.6.1
 scipy==1.15.2
 six==1.17.0
 threadpoolctl==3.5.0

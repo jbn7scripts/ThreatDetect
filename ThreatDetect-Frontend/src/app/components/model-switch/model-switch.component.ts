@@ -11,6 +11,11 @@ export class ModelSwitchComponent implements OnInit {
   availableModels: string[] = [];
   currentModel = '';
   selectedModel = '';
+  donutChartOptions: any; // Or use the correct ApexCharts type if you have it, e.g., Partial<ApexOptions>
+  totalRecords: number = 0;
+  maliciousCount: number = 0;
+  safeCount: number = 0;
+  detectionAccuracy: number = 0;
 
   constructor(private modelService: ModelService) {}
 
@@ -60,6 +65,7 @@ export class ModelSwitchComponent implements OnInit {
     this.modelService.changeModel(this.selectedModel).subscribe({
       next: (res) => {
         this.currentModel = this.selectedModel;
+        this.onModelSwitchSuccess(this.currentModel);
         Swal.fire('Success', `Model changed to ${this.currentModel}`, 'success');
       },
       error: (err) => {
@@ -68,5 +74,9 @@ export class ModelSwitchComponent implements OnInit {
         Swal.fire('Error', msg, 'error');
       }
     });
+  }
+
+  onModelSwitchSuccess(newModelName: string) {
+    this.modelService.setCurrentModel(newModelName);
   }
 }

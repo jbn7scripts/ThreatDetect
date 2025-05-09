@@ -17,11 +17,17 @@ import {
   ApexLegend,
   ApexStroke,
   ApexGrid,
-  ApexNonAxisChartSeries
+  ApexNonAxisChartSeries,
+  ChartType
 } from 'ng-apexcharts';
 
 import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
+import { ModelService } from '../../services/model.service';
+
+const DONUT_LABELS = ['Malicious', 'Safe', 'Other'];
+const DONUT_COLORS = ['#FF4B4B', '#4ADE80', '#FFB300'];
+const LEGEND_TEXT_COLOR = '#fff';
 
 export type DonutChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -44,15 +50,6 @@ export type LineChartOptions = {
   colors?: string[];
 };
 
-// interface RecordData {
-//   id?: number;
-//   record_type?: string;    // or recordType if you prefer
-//   status?: string;
-//   details?: string;
-//   created_at?: string;
-//   displayId?: string; // optional
-// }
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -60,32 +57,69 @@ export type LineChartOptions = {
   encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  // We store table records
-  records: any = [];
+  // Table records
+  records: any[] = [];
 
   // Donut chart
   @ViewChild('donutChart') donutChart?: ChartComponent;
-  public donutChartOptions: Partial<DonutChartOptions> | any;
+  public donutChartOptions: DonutChartOptions = {
+    series: [0, 0, 0],
+    chart: { type: 'donut', height: 300 },
+    labels: ['Malicious', 'Safe', 'Other'],
+    colors: ['#FF4B4B', '#4ADE80', '#FFB300'],
+    plotOptions: {},
+    dataLabels: { enabled: true },
+    legend: {
+      show: true,
+      position: 'bottom',
+      labels: {
+        colors: LEGEND_TEXT_COLOR,
+        useSeriesColors: false
+      }
+    },
+    tooltip: { enabled: true }
+  };
 
-  // Line chart
-  @ViewChild('lineChart') lineChart?: ChartComponent;
-  public lineChartOptions: Partial<LineChartOptions> | any;
+  // Bar chart for top malicious IPs
+  public barChartOptions: any = {
+    series: [{ name: 'Malicious Events', data: [] }],
+    chart: { type: 'bar', height: 250 },
+    xaxis: { categories: [] },
+    colors: ['#ff5252'],
+    dataLabels: { enabled: false },
+    plotOptions: { bar: { borderRadius: 6, horizontal: false } },
+    legend: { show: false },
+    tooltip: { enabled: true }
+  };
+
+  // KPIs and other dashboard variables
+  totalRecords: number = 0;
+  maliciousCount: number = 0;
+  safeCount: number = 0;
+  detectionAccuracy: number = 0;
+  modelVersion: string = '';
+  modelLastUpdated: string = '';
+  recentAlerts: any[] = [];
+  modelStatus = 'Online'; // or fetch from backend if available
+  currentModel: string = '';
+  selectedModel: string = '';
 
   private refreshInterval: any;
 
   constructor(
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    private modelService: ModelService
   ) {}
 
   ngOnInit(): void {
-    // fetch data upon init
     this.initializeDashboard();
-
-    // auto-refresh every 30s (optional)
     this.refreshInterval = setInterval(() => {
       this.fetchOverviewData();
-    }, 20_000);
+    }, 20000); // 20 seconds
+    this.modelService.currentModel$.subscribe(modelName => {
+      this.currentModel = modelName;
+    });
   }
 
   ngOnDestroy(): void {
@@ -104,99 +138,49 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private fetchOverviewData() {
-    // This will return { records, donutChart, lineChart }
     this.dataService.getOverviewRecords().subscribe({
       next: (res: any) => {
+        // KPIs
+        this.totalRecords = res.kpis.totalRecords;
+        this.maliciousCount = res.kpis.maliciousCount;
+        this.safeCount = res.kpis.safeCount;
+        this.detectionAccuracy = res.kpis.detectionAccuracy;
 
-        // 1) Populate table
-        this.records = res.records || [];
-        console.log(this.records);
+        // Recent Alerts
+        this.recentAlerts = res.recentAlerts;
 
+        // Top Malicious IPs
+        this.barChartOptions.series[0].data = res.topMaliciousCounts;
+        this.barChartOptions.xaxis.categories = res.topMaliciousIPs;
 
-        // 2) Donut chart
+        // Donut Chart
         this.donutChartOptions = {
           series: [
-            res.donutChart?.malicious || 0,
-            res.donutChart?.safe || 0,
-            res.donutChart?.other || 0
+            res.donutChart.malicious ?? 0,
+            res.donutChart.safe ?? 0,
+            res.donutChart.other ?? 0
           ],
-          chart: {
-            type: 'donut',
-            height: 300
-          },
-          labels: ['Malicious', 'Safe', 'Other'],
-          colors: ['#E91E63', '#546E7A', '#FF9800'],
-          plotOptions: {
-            pie: {
-              donut: {
-                size: '75%',
-                labels: {
-                  show: true,
-                  total: {
-                    show: true,
-                    label: 'Total',
-                    formatter: (w: any) => {
-                      return w.globals.seriesTotals.reduce((a: any, b: any) => a + b, 0);
-                    }
-                  }
-                }
-              }
-            }
-          },
-          dataLabels: {
-            enabled: true
-          },
+          chart: { type: 'donut', height: 300 },
+          labels: DONUT_LABELS,
+          colors: DONUT_COLORS,
+          plotOptions: {},
+          dataLabels: { enabled: true },
           legend: {
             show: true,
-            position: 'bottom'
-          },
-          tooltip: {
-            enabled: true
-          }
-        };
-
-        // 3) Line chart
-        const lineData = res.lineChart || [];
-        const categories = lineData.map((item: any) => item.date);
-        const safeData = lineData.map((item: any) => item.safe);
-        const maliciousData = lineData.map((item: any) => item.malicious);
-        const otherData = lineData.map((item: any) => item.other);
-
-        this.lineChartOptions = {
-          series: [
-            { name: 'Safe', data: safeData, color: '#546E7A' },
-            { name: 'Malicious', data: maliciousData, color: '#E91E63' },
-            { name: 'Other', data: otherData, color: '#FF9800' }
-          ],
-          chart: {
-            type: 'line',
-            height: 260,
-            toolbar: {
-              show: true
-            }
-          },
-          xaxis: {
-            categories: categories,
+            position: 'bottom',
             labels: {
-              rotate: -50,
-              rotateAlways: true
+              colors: LEGEND_TEXT_COLOR,
+              useSeriesColors: false
             }
           },
-          stroke: {
-            width: 3,
-            curve: 'smooth'
-          },
-          legend: {
-            position: 'top'
-          },
-          grid: {
-            borderColor: '#f1f1f1'
-          }
+          tooltip: { enabled: true }
         };
 
+        // Table
+        this.records = res.records;
         Swal.close();
       },
-      error: (err) => {
+      error: (err: any) => {
         Swal.fire({
           icon: 'error',
           title: 'Error Fetching Records',
@@ -207,8 +191,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  acknowledgeAlert(alert: any) {
+    alert.acknowledged = true;
+  }
+
   openDetails(record: any): void {
-    // Show a sweetalert with record details
     Swal.fire({
       title: `Record #${record.id}`,
       html: `
@@ -221,8 +208,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   formatTimestamp(ts: number): string {
-    // Convert Unix epoch float to local date/time
-    const d = new Date(ts * 1000);  // if ts is seconds-based
+    const d = new Date(ts * 1000); // if ts is seconds-based
     return d.toLocaleString();
   }
 
@@ -230,14 +216,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     try {
       const featuresObj = JSON.parse(featuresJson);
       const formatted = JSON.stringify(featuresObj, null, 2);
-
       Swal.fire({
         title: 'Flow Features',
         html: `<pre style="text-align: left; font-size: 0.9rem;">${formatted}</pre>`,
         width: '60vw',
-        customClass: {
-          popup: 'text-start'
-        },
+        customClass: { popup: 'text-start' },
         confirmButtonText: 'Close'
       });
     } catch (err) {

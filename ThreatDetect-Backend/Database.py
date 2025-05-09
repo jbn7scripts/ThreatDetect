@@ -220,6 +220,59 @@ def fetch_sniffed_data_overview():
         "lineChart": line_chart
     }
 
+def fetch_dashboard_overview():
+    """
+    Returns all data needed for the dashboard: records, donut, line, KPIs, recent alerts, top malicious IPs.
+    """
+    # Reuse your existing logic from fetch_sniffed_data_overview
+    overview = fetch_sniffed_data_overview()
+    records = overview["records"]
+    donut_data = overview["donutChart"]
+    line_chart = overview["lineChart"]
+
+    # KPIs
+    total_records = len(records)
+    malicious_count = donut_data['malicious']
+    safe_count = donut_data['safe']
+    detection_accuracy = round(100 * safe_count / total_records, 2) if total_records else 0
+
+    # Recent alerts (last 10 malicious)
+    recent_alerts = [
+        {
+            "time": r["timestamp"],
+            "type": r["prediction_label"],
+            "source": r["flow_key"].split(',')[1].replace("'", '').strip() if ',' in r["flow_key"] else '',
+            "destination": r["flow_key"].split(',')[0].replace('(', '').replace("'", '').strip(),
+            "severity": "High" if r["prediction_label"].upper() == "DDOS" else "Medium"
+        }
+        for r in sorted(records, key=lambda x: x["timestamp"], reverse=True)
+        if r["prediction_label"].upper() != "BENIGN"
+    ][:10]
+
+    # Top malicious source IPs
+    from collections import Counter
+    malicious_ips = [
+        r["flow_key"].split(',')[1].replace("'", '').strip()
+        for r in records if r["prediction_label"].upper() != "BENIGN"
+    ]
+    top_malicious = Counter(malicious_ips).most_common(5)
+    top_malicious_ips = [ip for ip, count in top_malicious]
+    top_malicious_counts = [count for ip, count in top_malicious]
+
+    return {
+        "records": records,
+        "donutChart": donut_data,
+        "lineChart": line_chart,
+        "kpis": {
+            "totalRecords": total_records,
+            "maliciousCount": malicious_count,
+            "safeCount": safe_count,
+            "detectionAccuracy": detection_accuracy
+        },
+        "recentAlerts": recent_alerts,
+        "topMaliciousIPs": top_malicious_ips,
+        "topMaliciousCounts": top_malicious_counts
+    }
 
 # Initialize DB upon import
 createDabase()

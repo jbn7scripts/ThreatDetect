@@ -28,6 +28,7 @@ export class LoginComponent {
       next: (res: any) => {
         if (res.token) {
           this.authService.handleLoginSuccess(res.token);
+          localStorage.setItem('token', res.token);
           this.router.navigate(['/dashboard']);
         }
       },

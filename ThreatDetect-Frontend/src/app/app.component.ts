@@ -1,6 +1,7 @@
 // src/app/app.component.ts
 import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';  // ensure correct path
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import { AuthService } from './services/auth.service';  // ensure correct path
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, public router: Router) {}
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
@@ -16,5 +17,9 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  isActive(route: string): boolean {
+    return this.router.url.startsWith(route);
   }
 }
