@@ -1,32 +1,128 @@
-<div class="container my-5 py-5">
-  <div class="card p-4 bg-dark text-light">
-    <h2 class="text-center mb-4">Switch Machine Learning Model</h2>
-    <p class="text-center text-muted mb-3">
-      Current Model: <span class="text-info fw-bold">{{ currentModel }}</span>
-    </p>
+<div class="model-switch-bg"></div>
+<div class="hero-header px-4 py-8 mt-6">
+  <div class="hero-title-row">
+    <span class="hero-icon">
+      <!-- Database SVG icon (lucide-react style) -->
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3.5"/><path d="M3 5v7c0 1.93 4.03 3.5 9 3.5s9-1.57 9-3.5V5"/><path d="M3 12v7c0 1.93 4.03 3.5 9 3.5s9-1.57 9-3.5v-7"/></svg>
+    </span>
+    <h1 class="hero-title">Model Management</h1>
+  </div>
+  <div class="hero-underline"></div>
+</div>
+<div class="model-switch-flex-layout">
+  <div class="model-switch-card">
+    <h2 class="model-switch-title">Switch Machine Learning Model</h2>
+    <div class="selected-model-pill">{{ currentModel }}</div>
+    <p class="switch-info centered-info">Switching the model will change which ML model is used for threat detection. This may affect detection results.</p>
+    <div class="model-switch-form">
+      <label for="modelSelect" class="form-label">
+        <strong>Select a Model</strong>:
+      </label>
+      <select
+        id="modelSelect"
+        [(ngModel)]="selectedModel"
+        class="form-select model-select"
+        name="modelSelect"
+      >
+        <option [value]="''" disabled>Select model...</option>
+        <option *ngFor="let m of availableModels" [value]="m">
+          {{ m }}
+        </option>
+      </select>
+      <button class="btn btn-cyber model-switch-btn" (click)="onChangeModel()">
+        Change Model
+      </button>
+    </div>
+  </div>
 
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="mb-3">
-          <label for="modelSelect" class="form-label"
-          ><strong>Select a Model</strong>:</label
-          >
-          <select
-            id="modelSelect"
-            [(ngModel)]="selectedModel"
-            class="form-select"
-            name="modelSelect"
-          >
-            <option [value]="''" disabled>Select model...</option>
-            <option *ngFor="let m of availableModels" [value]="m">
-              {{ m }}
-            </option>
-          </select>
+  <!-- Model Comparison Section -->
+  <div class="model-comparison-section">
+    <div class="model-comparison-grid">
+      <!-- Top row: Random Forest and KNN -->
+      <div class="model-comparison-card rf">
+        <div class="model-card-header">
+          <span class="model-badge rf">RF</span>
+          <span class="model-name">Random Forest</span>
         </div>
-
-        <button class="btn btn-cyber w-100" (click)="onChangeModel()">
-          Change Model
-        </button>
+        <div class="model-metrics">
+          <div class="metric-row">
+            <span>Accuracy</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.2%"></div></div>
+            <span class="metric-value">98.2%</span>
+          </div>
+          <div class="metric-row">
+            <span>F1</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.2%"></div></div>
+            <span class="metric-value">98.2%</span>
+          </div>
+          <div class="metric-row">
+            <span>Precision</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.3%"></div></div>
+            <span class="metric-value">98.3%</span>
+          </div>
+          <div class="metric-row">
+            <span>Recall</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.2%"></div></div>
+            <span class="metric-value">98.2%</span>
+          </div>
+        </div>
+      </div>
+      <div class="model-comparison-card knn">
+        <div class="model-card-header">
+          <span class="model-badge knn">KNN</span>
+          <span class="model-name">K-Nearest Neighbors</span>
+        </div>
+        <div class="model-metrics">
+          <div class="metric-row">
+            <span>Accuracy</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.1%"></div></div>
+            <span class="metric-value">98.1%</span>
+          </div>
+          <div class="metric-row">
+            <span>F1</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.1%"></div></div>
+            <span class="metric-value">98.1%</span>
+          </div>
+          <div class="metric-row">
+            <span>Precision</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.2%"></div></div>
+            <span class="metric-value">98.2%</span>
+          </div>
+          <div class="metric-row">
+            <span>Recall</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.1%"></div></div>
+            <span class="metric-value">98.1%</span>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom row: Decision Tree centered -->
+      <div class="model-comparison-card dt model-comparison-card-center">
+        <div class="model-card-header">
+          <span class="model-badge dt">DT</span>
+          <span class="model-name">Decision Tree</span>
+        </div>
+        <div class="model-metrics">
+          <div class="metric-row">
+            <span>Accuracy</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.1%"></div></div>
+            <span class="metric-value">98.1%</span>
+          </div>
+          <div class="metric-row">
+            <span>F1</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.1%"></div></div>
+            <span class="metric-value">98.1%</span>
+          </div>
+          <div class="metric-row">
+            <span>Precision</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.2%"></div></div>
+            <span class="metric-value">98.2%</span>
+          </div>
+          <div class="metric-row">
+            <span>Recall</span>
+            <div class="metric-bar"><div class="bar-fill" style="width:98.1%"></div></div>
+            <span class="metric-value">98.1%</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

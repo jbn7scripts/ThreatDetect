@@ -120,6 +120,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.modelService.currentModel$.subscribe(modelName => {
       this.currentModel = modelName;
     });
+    // Fetch the current model name from the backend
+    this.modelService.getCurrentModel().subscribe((res: any) => {
+      if (res && res.current_model) {
+        this.currentModel = res.current_model;
+      }
+    });
   }
 
   ngOnDestroy(): void {

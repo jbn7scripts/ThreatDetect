@@ -123,6 +123,9 @@ class Sniffer:
         self.feature_order = feature_order or []
         self.send_email_func = send_email_func
         self.admin_email = admin_email  # used if we want to email an admin
+        self.consecutive_malicious_count = 0
+        self.user_email = None
+        self.alert_sent_for_streak = False  # Add this flag
 
     def _packet_handler(self, packet):
         #print(packet.summary())
@@ -176,6 +179,18 @@ class Sniffer:
                 timestamp=time.time()
             )
 
+            # Improved alert logic: only send once per malicious streak
+            if attack_name != "BENIGN":
+                self.consecutive_malicious_count += 1
+                if (self.consecutive_malicious_count == 3 and not self.alert_sent_for_streak and self.user_email):
+                    subject = "ThreatDetect: 3 Consecutive Malicious Packets Detected"
+                    body = f"Three consecutive malicious packets have been detected.\nLast flow: {key}\nPrediction: {attack_name}"
+                    self.send_email_func(self.user_email, subject, body)
+                    self.alert_sent_for_streak = True  # Only send once per streak
+            else:
+                self.consecutive_malicious_count = 0
+                self.alert_sent_for_streak = False  # Reset on benign
+
         self.reset_flows()
 
     def reset_flows(self):
@@ -214,3 +229,6 @@ class Sniffer:
 
     def stop_sniffing(self):
         print("[Sniffer] Stop sniffing requested (not trivial).")
+
+    def set_user_email(self, email):
+        self.user_email = email

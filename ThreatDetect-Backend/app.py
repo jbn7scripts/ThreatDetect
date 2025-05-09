@@ -233,6 +233,7 @@ def api_login():
     if bcrypt.hashpw(password.encode('utf-8'), stored_hashed_pw.encode('utf-8')).decode('utf-8') == stored_hashed_pw:
         # Password matches
         token = create_jwt_token(email)
+        sniffer_instance.set_user_email(email)  # Set user email for alerting
         return jsonify({"token": token}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401

@@ -247,7 +247,29 @@ body::after {
 
 .kpi-malicious .kpi-value { color: #FF4B4B; }
 .kpi-safe .kpi-value { color: #4ADE80; }
-.kpi-accuracy .kpi-value { color: #FFD600; }
+.kpi-accuracy .kpi-value {
+  color: #36A2FF;
+  background: rgba(54,162,255,0.10);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  max-width: 320px;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin: 0 auto;
+  padding: 0.4em 1em;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(54,162,255,0.10);
+  display: flex;
+  align-items: center;
+  user-select: text;
+  cursor: pointer;
+}
+.kpi-accuracy .kpi-value:hover {
+  background: rgba(54,162,255,0.18);
+  box-shadow: 0 2px 12px rgba(54,162,255,0.18);
+}
 .kpi-total .kpi-value { color: #36CFFF; }
 
 .dashboard-status-row {
@@ -519,4 +541,10 @@ body::after {
 }
 .model-status-dot.offline + .model-status-state {
   color: #FF4B4B;
+}
+
+.uniform-table th, .uniform-table td, .centered-cell {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
 }

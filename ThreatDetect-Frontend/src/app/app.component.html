@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">
-      <img src="assets/images/logo.svg"> Threat Detect
+    <a class="navbar-brand brand-logo" routerLink="/">
+      <img src="assets/images/logo.png" style="height:56px;"> 
     </a>
     <button
       class="navbar-toggler"
@@ -11,84 +11,68 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <!-- Common links -->
+      <ul class="navbar-nav ms-auto nav-links">
         <li class="nav-item" *ngIf="!isLoggedIn()">
           <a class="nav-link" routerLink="/">Home</a>
         </li>
-
         <li class="nav-item" *ngIf="isLoggedIn()">
-        <a class="nav-link" routerLink="/dashboard">Dashboard</a>
-        </li>
-
-
-        <li class="nav-item" *ngIf="isLoggedIn()">
-          <a class="nav-link" routerLink="/model-switch">Model Switch</a>
+          <a class="nav-link" routerLink="/dashboard" [ngClass]="{'active-link': isActive('/dashboard')}">Dashboard</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn()">
-          <a class="nav-link" routerLink="/predict">Predict</a>
+          <a class="nav-link" routerLink="/model-switch" [ngClass]="{'active-link': isActive('/model-switch')}">Model Switch</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn()">
-          <a class="nav-link" routerLink="/upload">Upload</a>
+          <a class="nav-link" routerLink="/predict" [ngClass]="{'active-link': isActive('/predict')}">Predict</a>
         </li>
-
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/upload" [ngClass]="{'active-link': isActive('/upload')}">Upload</a>
+        </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/about">About</a>
+          <a class="nav-link" routerLink="/about" [ngClass]="{'active-link': isActive('/about')}">About</a>
         </li>
-
         <li class="nav-item" *ngIf="!isLoggedIn()">
           <a class="nav-link" routerLink="/login">Login</a>
         </li>
-
         <li class="nav-item" *ngIf="!isLoggedIn()">
           <a class="btn btn-cyber ms-2" routerLink="/register">Register</a>
         </li>
-
-        <!--        style="background-color: #9b5b5b; border-radius: 5px; padding: 8px 10px"-->
         <li class="nav-item" *ngIf="isLoggedIn()">
-          <a class="nav-link logout-button" (click)="logout()">Logout</a>
+          <a class="btn btn-gradient-logout ms-3" (click)="logout()">Logout</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
-
+<div class="navbar-accent"></div>
 <div style="margin-top: 70px;">
   <router-outlet></router-outlet>
 </div>
-
-<footer class="footer mt-5">
-  <div class="container">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <h5>Threat Detect</h5>
-        <p>Next-generation intrusion detection powered by ML</p>
+<footer class="footer glass-footer mt-5">
+  <div class="footer-accent"></div>
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <div class="footer-logo-row">
+        <img src="assets/images/logo.png" class="footer-logo" alt="Threat Detect Logo">
+        <span class="footer-brand">Threat Detect</span>
       </div>
-      <div class="col-md-2">
-        <!-- Possibly solutions links -->
-      </div>
-      <div class="jerry">
-        <div class="col-md-2-">
-          <h6>Company</h6>
-          <ul class="list-unstyled">
-            <li><a routerLink="/about" class="text-light">About</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="spike">
-        <div class="col-md-4-">
-          <h6>Contact</h6>
-          <ul class="list-unstyled">
-            <li>supportthreatdetect.com</li>
-            <li>+44 7745690988</li>
-          </ul>
-        </div>
-      </div>
+      <p class="footer-desc">Next-generation intrusion detection powered by ML</p>
     </div>
-    <div class="text-center mt-4">
-      <p class="mb-0">&copy; 2025 Threat Detect. All rights reserved.</p>
+    <div class="footer-col">
+      <h6>Company</h6>
+      <ul class="footer-links">
+        <li><a routerLink="/about">About</a></li>
+      </ul>
     </div>
+    <div class="footer-col">
+      <h6>Contact</h6>
+      <ul class="footer-links">
+        <li>supportthreatdetect.com</li>
+        <li>+44 7745690988</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-copyright text-center mt-4">
+    <p class="mb-0">&copy; 2025 Threat Detect. All rights reserved.</p>
   </div>
 </footer>

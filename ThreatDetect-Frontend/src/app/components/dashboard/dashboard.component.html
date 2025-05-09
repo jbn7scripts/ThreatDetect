@@ -1,3 +1,4 @@
+<div class="dashboard-bg"></div>
 <div class="dashboard-container">
   <h2 class="dashboard-title">Dashboard Overview</h2>
 
@@ -8,7 +9,7 @@
     </div>
     <div class="dashboard-card-body">
       <div class="dashboard-table-wrapper">
-        <table class="dashboard-table">
+        <table class="dashboard-table uniform-table">
           <thead>
             <tr>
               <th>ID</th>
@@ -21,9 +22,9 @@
           </thead>
           <tbody>
             <tr *ngFor="let rec of records">
-              <td>{{ rec.id }}</td>
-              <td>{{ rec.flow_key }}</td>
-              <td>
+              <td class="centered-cell">{{ rec.id }}</td>
+              <td class="centered-cell">{{ rec.flow_key }}</td>
+              <td class="centered-cell">
                 <span [ngClass]="{
                   'label-benign': rec.prediction_label === 'BENIGN',
                   'label-malicious': rec.prediction_label !== 'BENIGN'
@@ -31,13 +32,11 @@
                   {{ rec.prediction_label }}
                 </span>
               </td>
-              <td>{{ formatTimestamp(rec.timestamp) }}</td>
-              <td>
-                <button class="btn-features" (click)="showFeatures(rec.features_json)">
-                  View Features
-                </button>
+              <td class="centered-cell">{{ formatTimestamp(rec.timestamp) }}</td>
+              <td class="centered-cell">
+                <button class="btn-features" (click)="showFeatures(rec.features_json)">View Features</button>
               </td>
-              <td>
+              <td class="centered-cell">
                 <span [ngClass]="{
                   'status-safe': rec.prediction_label === 'BENIGN',
                   'status-malicious': rec.prediction_label !== 'BENIGN'
@@ -94,8 +93,8 @@
           <div class="kpi-value">{{ safeCount }}</div>
         </div>
         <div class="dashboard-kpi-card kpi-accuracy">
-          <div class="kpi-title">Benign Flow</div>
-          <div class="kpi-value">{{ detectionAccuracy }}%</div>
+          <div class="kpi-title">Model Loaded</div>
+          <div class="kpi-value">{{ currentModel }}</div>
         </div>
       </div>
     </div>
@@ -103,7 +102,6 @@
     <div class="dashboard-model-status-bar">
       <div class="model-status-dot" [ngClass]="{'online': modelStatus === 'Online', 'offline': modelStatus !== 'Online'}"></div>
       <div class="model-status-label">Model</div>
-      <div class="model-status-name">{{ modelVersion }}</div>
       <div class="model-status-state">{{ modelStatus }}</div>
     </div>
   </div>
@@ -144,7 +142,6 @@
           <td>TCP</td>
           <td>🇬🇧</td>
           <td>
-            <div>No additional info</div>
             <div style="color: #4ADE80; font-size: 0.98em; display: flex; align-items: center; justify-content: center; gap: 0.3em;">
               <span>Email alert sent</span>
               <span style="font-size: 1.1em;">✔️</span>

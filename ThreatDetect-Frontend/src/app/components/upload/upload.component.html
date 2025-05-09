@@ -1,56 +1,59 @@
-<div class="container my-5 py-5">
-  <div class="auth-container">
-    <h2 class="text-center mb-4">Batch File Analysis</h2>
-    <p class="text-center text-muted mb-5">Upload CSV or PCAP for bulk intrusion detection</p>
+<div class="upload-bg"></div>
+<div class="upload-root">
+  <div class="container my-5 py-5">
+    <div class="auth-container">
+      <h2 class="text-center mb-4">Batch File Analysis</h2>
+      <p class="text-center text-muted mb-5">Upload CSV or PCAP for bulk intrusion detection</p>
 
-    <div class="file-upload-wrapper mb-4 text-center">
-      <label class="form-label d-block mb-2"><strong>Select CSV or PCAP</strong></label>
-      <input
-        type="file"
-        class="form-control w-auto d-inline-block"
-        (change)="onFileSelected($event)"
-        style="display: inline-block;"
-      />
-      <small class="text-muted d-block mt-2">Accepted: .csv or .pcap</small>
-    </div>
+      <div class="file-upload-wrapper mb-4 text-center">
+        <label class="form-label d-block mb-2"><strong>Select CSV or PCAP</strong></label>
+        <input
+          type="file"
+          class="form-control w-auto d-inline-block"
+          (change)="onFileSelected($event)"
+          style="display: inline-block;"
+        />
+        <small class="text-muted d-block mt-2">Accepted: .csv or .pcap</small>
+      </div>
 
-    <div class="text-center">
-      <button class="btn btn-cyber w-50" (click)="onUpload()">
-        <i class="fas fa-cloud-upload-alt me-2"></i>Upload & Analyse
-      </button>
-    </div>
+      <div class="text-center">
+        <button class="btn btn-cyber w-50" (click)="onUpload()">
+          <i class="fas fa-cloud-upload-alt me-2"></i>Upload & Analyse
+        </button>
+      </div>
 
-    <div class="results-section mt-5" *ngIf="predictions.length > 0">
-      <h4 class="mb-4"><i class="fas fa-poll me-2"></i>Analysis Results</h4>
-      <div class="table-responsive">
-        <table class="table table-dark table-hover align-middle">
-          <thead class="bg-secondary">
-          <tr>
-            <th>#</th>
-            <th>Class Name</th>
-            <th *ngIf="predictions[0].probability !== undefined">
-              Probability
-            </th>
-            <th *ngIf="predictions[0].flow_key !== undefined">
-              Flow Key
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let p of predictions">
-            <td>{{ p.sr_no }}</td>
-            <td>{{ p.class_name }}</td>
-            <!-- Show Probability if it exists (CSV has probability, PCAP might not) -->
-            <td *ngIf="p.probability !== undefined">
-              {{ p.probability | number:'1.4-4' }}
-            </td>
-            <!-- Show Flow Key if it exists (PCAP has flow_key, CSV might not) -->
-            <td *ngIf="p.flow_key !== undefined">
-              {{ p.flow_key }}
-            </td>
-          </tr>
-          </tbody>
-        </table>
+      <div class="results-section mt-5" *ngIf="predictions.length > 0">
+        <h4 class="mb-4"><i class="fas fa-poll me-2"></i>Analysis Results</h4>
+        <div class="table-responsive">
+          <table class="table table-dark table-hover align-middle">
+            <thead class="bg-secondary">
+            <tr>
+              <th>#</th>
+              <th>Class Name</th>
+              <th *ngIf="predictions[0].probability !== undefined">
+                Probability
+              </th>
+              <th *ngIf="predictions[0].flow_key !== undefined">
+                Flow Key
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let p of predictions">
+              <td>{{ p.sr_no }}</td>
+              <td>{{ p.class_name }}</td>
+              <!-- Show Probability if it exists (CSV has probability, PCAP might not) -->
+              <td *ngIf="p.probability !== undefined">
+                {{ p.probability | number:'1.4-4' }}
+              </td>
+              <!-- Show Flow Key if it exists (PCAP has flow_key, CSV might not) -->
+              <td *ngIf="p.flow_key !== undefined">
+                {{ p.flow_key }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

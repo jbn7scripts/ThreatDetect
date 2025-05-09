@@ -16,3 +16,19 @@
 .feature-icon i {
   color: #9c27b0;
 }
+
+.text-gold {
+  color: #d0a647 !important;
+  text-shadow: 0 2px 12px #f8e08388, 0 1px 8px #a0762644;
+}
+
+.brand-gradient-text {
+  background: linear-gradient(90deg, #d0a647 0%, #eccb74 40%, #f8e083 70%, #a07626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  text-shadow: 0 2px 12px #f8e08344, 0 1px 8px #a0762644;
+}

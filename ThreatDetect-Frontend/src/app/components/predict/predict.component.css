@@ -13,3 +13,31 @@ body {
   background: url('../../../assets/images/predictbg.jpg') no-repeat center center;
   background-size: cover;
 }
+
+.predict-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: linear-gradient(135deg, #6366f1 0%, #26a4c7 100%);
+  overflow: hidden;
+}
+.predict-bg::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 1200px;
+  height: 700px;
+  transform: translate(-50%, -40%);
+  background: radial-gradient(circle at 60% 40%, #6366f1 0%, #26a4c7 60%, transparent 100%);
+  opacity: 0.13;
+  z-index: 0;
+  pointer-events: none;
+}
+.predict-root {
+  position: relative;
+  z-index: 1;
+}
